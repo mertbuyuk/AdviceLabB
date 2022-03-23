@@ -14,6 +14,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;  
 	private String firstName,lastName;
+	private String password;
 	public String getFirstName() {
 		return firstName;
 	}
@@ -31,6 +32,12 @@ public class User {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	} 
 
 }
