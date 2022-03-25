@@ -2,13 +2,17 @@ package com.mb.demo.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -27,13 +31,16 @@ public class User {
 	private String firstName,lastName;
 	private String password;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
-	private Collection<Role> roles = new ArrayList<>();
+	@OneToMany(fetch = FetchType.EAGER)
+	private List<Role> roles = new ArrayList<>();
 	
-	public Collection<Role> getRoles() {
+	@OneToMany(fetch = FetchType.LAZY)
+	private List<Film> film = new ArrayList<>();
+	
+	public List<Role> getRoles() {
 		return roles;
 	}
-	public void setRoles(Collection<Role> roles) {
+	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
 	public String getFirstName() {
