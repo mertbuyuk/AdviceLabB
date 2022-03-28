@@ -67,15 +67,13 @@ public class UserController {
 			System.out.println(authRequest.getUsername());
 			Authentication authenticate =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 			
-			UserDetails user  = (UserDetails) authenticate.getPrincipal();
-			
 			return ResponseEntity.ok().header(
 				   HttpHeaders.AUTHORIZATION, 
-				   jwtUtil.generateToken(user)).body("Token");
+				   jwtUtil.generateToken(authenticate)).body("Token");
 					
 		} catch (BadCredentialsException  e) {
 			System.out.println(e.getMessage());
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			throw new Exception("Incorret username or password", e);
 		}
 	
 	}
