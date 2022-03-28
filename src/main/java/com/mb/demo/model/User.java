@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class User {
 	//lombok can use for getters setters but its not working sometimes on eclipse because of configs idk why
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;  
 	private String firstName,lastName;
 	private String password;
@@ -35,7 +35,7 @@ public class User {
 	private List<Role> roles = new ArrayList<>();
 	
 	@OneToMany(fetch = FetchType.LAZY)
-	private List<Film> film = new ArrayList<>();
+	private List<Post> post = new ArrayList<>();
 	
 	public List<Role> getRoles() {
 		return roles;

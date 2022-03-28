@@ -1,6 +1,8 @@
 package com.mb.demo.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,13 +15,14 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "film")
+@Table(name = "post")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Film {
+public class Post {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
 	private Long id;
 	
 	@ManyToOne
@@ -28,6 +31,45 @@ public class Film {
 	
 	private String filmName;
 	
+	private String desc;
+	
+	private int likeCount;
+	
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+
+	public int getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(int likeCount) {
+		this.likeCount = likeCount;
+	}
+
+	public int getUnlikeCount() {
+		return unlikeCount;
+	}
+
+	public void setUnlikeCount(int unlikeCount) {
+		this.unlikeCount = unlikeCount;
+	}
+
+	private int unlikeCount;
+
+	
+	public PostType getType() {
+		return type;
+	}
+
+	public void setType(PostType type) {
+		this.type = type;
+	}
+
 	public Long getId() {
 		return id;
 	}

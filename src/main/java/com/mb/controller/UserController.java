@@ -3,8 +3,13 @@ package com.mb.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +23,7 @@ import com.mb.demo.model.User;
 import com.mb.jwt.AuthRequest;
 import com.mb.jwt.JwtUtil;
 import com.mb.services.abstracts.UserService;
+import com.mb.services.concretes.UserManager;
 
 @RestController
 @RequestMapping("api/user")
@@ -25,7 +31,7 @@ public class UserController {
 	
 	
 	@Autowired
-	UserService userService;
+	UserManager userService;
 	
 	@Autowired 
 	JwtUtil jwtUtil;
@@ -55,20 +61,23 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public String createToken(@RequestBody AuthRequest authRequest) throws Exception{
+	public ResponseEntity<String> createToken(@RequestBody AuthRequest authRequest) throws Exception{
 		try {
 			System.out.println(authRequest.getPassword());
 			System.out.println(authRequest.getUsername());
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-		} catch (Exception e) {
+			Authentication authenticate =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+			
+			UserDetails user  = (UserDetails) authenticate.getPrincipal();
+			
+			return ResponseEntity.ok().header(
+				   HttpHeaders.AUTHORIZATION, 
+				   jwtUtil.generateToken(user)).body("Token");
+					
+		} catch (BadCredentialsException  e) {
 			System.out.println(e.getMessage());
-			throw new Exception("Incorret username or password", e);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
-		
-		final UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
-        final String jwt = jwtUtil.generateToken(userDetails);
-
-        return jwt;
+	
 	}
 	
 }
