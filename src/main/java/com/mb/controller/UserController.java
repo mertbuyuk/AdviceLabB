@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,6 +61,7 @@ public class UserController {
 		return this.userService.findById(id);
 	}
 	
+	
 	@PostMapping("/login")
 	public ResponseEntity<String> createToken(@RequestBody AuthRequest authRequest) throws Exception{
 		try {
@@ -67,13 +69,11 @@ public class UserController {
 			System.out.println(authRequest.getUsername());
 			Authentication authenticate =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 			
-			return ResponseEntity.ok().header(
-				   HttpHeaders.AUTHORIZATION, 
-				   jwtUtil.generateToken(authenticate)).body("Token");
+			return ResponseEntity.ok().body("token: "+jwtUtil.generateToken(authenticate));
 					
 		} catch (BadCredentialsException  e) {
 			System.out.println(e.getMessage());
-			throw new Exception("Incorret username or password", e);
+			return ResponseEntity.status(401).body(e.getMessage());
 		}
 	
 	}
