@@ -3,6 +3,7 @@ package com.mb.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,9 +17,8 @@ public class PostController {
 	@Autowired
 	PostManager postManager;
 	
-	
 	@PostMapping("add")
-	private void addPost(Post post) {
+	private void addPost(@RequestBody Post post) {
 		postManager.addPost(post);	
 	}
 	

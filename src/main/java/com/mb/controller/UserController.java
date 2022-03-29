@@ -30,15 +30,8 @@ import com.mb.services.concretes.UserManager;
 @RequestMapping("api/user/")
 public class UserController {
 	
-	
 	@Autowired
 	UserManager userManager;
-	
-	
-	@PostMapping("/save")
-	public void add(@RequestBody User user) {
-		this.userManager.addUser(user);
-	}
 	
 	@PostMapping("/saveRole")
 	public void addRole(@RequestBody Role role) {

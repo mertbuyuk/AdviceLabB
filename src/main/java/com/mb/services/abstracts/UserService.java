@@ -13,9 +13,11 @@ public interface UserService extends UserDetailsService{
 	
 	Optional<User> findById(Long id);
 	
-	void addUser(User user);
-	
 	void addRoleToUser(String username, String roleName);
 	
 	void saveRole(Role role);
+	
+	void register(User user, String siteUrl) ;
+	
+	boolean verify(String code);
 }

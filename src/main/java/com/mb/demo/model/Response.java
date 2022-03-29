@@ -4,7 +4,6 @@ import java.util.List;
 
 public class Response {
 	    private String token;
-	    private String type = "Basic";
 	    private String username;
 	    private String password;
 	    
