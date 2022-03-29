@@ -27,55 +27,33 @@ import com.mb.services.abstracts.UserService;
 import com.mb.services.concretes.UserManager;
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("api/user/")
 public class UserController {
 	
 	
 	@Autowired
-	UserManager userService;
+	UserManager userManager;
 	
-	@Autowired 
-	JwtUtil jwtUtil;
-	
-	@Autowired
-	AuthenticationManager authenticationManager;
 	
 	@PostMapping("/save")
 	public void add(@RequestBody User user) {
-		this.userService.addUser(user);
+		this.userManager.addUser(user);
 	}
 	
 	@PostMapping("/saveRole")
 	public void addRole(@RequestBody Role role) {
-		this.userService.saveRole(role);
+		this.userManager.saveRole(role);
 	}
 	
 	@PostMapping("/addRoleToUser")
 	public void addRoleToUser(@RequestBody User user, Role role) {
-		this.userService.addRoleToUser(user.getFirstName(), role.getRoleName());
+		this.userManager.addRoleToUser(user.getFirstName(), role.getRoleName());
 	}
 	
 	@GetMapping("/findById")
 	public Optional<User> findById(Long id) {
 		
-		return this.userService.findById(id);
-	}
-	
-	
-	@PostMapping("/login")
-	public ResponseEntity<String> createToken(@RequestBody AuthRequest authRequest) throws Exception{
-		try {
-			System.out.println(authRequest.getPassword());
-			System.out.println(authRequest.getUsername());
-			Authentication authenticate =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-			
-			return ResponseEntity.ok().body("token: "+jwtUtil.generateToken(authenticate));
-					
-		} catch (BadCredentialsException  e) {
-			System.out.println(e.getMessage());
-			return ResponseEntity.status(401).body(e.getMessage());
-		}
-	
+		return this.userManager.findById(id);
 	}
 	
 }

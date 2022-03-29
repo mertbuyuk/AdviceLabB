@@ -29,6 +29,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private JwtTokenFilter jwtTokenFilter;
+	
+	@Autowired
+	JwtAuthEntryPoint jwtAuthEntryPoint;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -41,21 +44,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// cors başkalarının veri çalmasını engellemek için tarayıcının uyguladığı sert
 		// kuralları esnetmek için kullanılır
 		// başka sitenin senden veri çekmesi vs
-		http.csrf().disable();
-
-		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-		// unauthorized
-		http.exceptionHandling().authenticationEntryPoint((request, response, ex) -> {
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
-		});
-
-		http.headers().frameOptions().disable();
-
-		http.authorizeRequests().anyRequest().permitAll();
-
+       http.csrf().disable()
+				// dont authenticate this particular request
+				.authorizeRequests().antMatchers("/h2-ui/**","/v2/api-docs", "/swagger-resources/**", "/swagger-ui/**","/api/auth/**").permitAll().
+				// all other requests need to be authenticated
+				anyRequest().authenticated().and().
+				// make sure we use stateless session; session won't be used to
+				// store user's state.
+				exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint).and().sessionManagement()
+				
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		
+        http.headers().frameOptions().sameOrigin();
 		http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-		// http.addFilter(null);//custom filter username password auth class
 	}
 
 	@Bean(name = BeanIds.AUTHENTICATION_MANAGER)
