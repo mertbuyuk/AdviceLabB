@@ -21,9 +21,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.mb.dao.RoleDao;
+
 import com.mb.dao.UserDao;
-import com.mb.demo.model.Role;
+
 import com.mb.demo.model.User;
 import com.mb.services.abstracts.UserService;
 
@@ -34,9 +34,6 @@ public class UserManager implements UserService, UserDetailsService {
 
 	@Autowired
 	private UserDao userDao;
-	
-	@Autowired
-	private RoleDao roleDao;
 	
 	@Autowired
 	private JavaMailSender mailSender;
@@ -56,29 +53,21 @@ public class UserManager implements UserService, UserDetailsService {
 		 }
 		 
 		 Collection<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-		 user.getRoles().forEach(role -> {
+		/* user.getRoles().forEach(role -> {
 			 authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-					 });
+					 });*/
 		 
 		return new org.springframework.security.core.userdetails.User(user.getFirstName(), user.getPassword(), authorities);
 	}
 
 	@Override
-	public void addRoleToUser(String username, String roleName) {
-		User user = userDao.getUserByFirstName(username);
-		Role role = roleDao.findByName(roleName);
+	public String register(User user, String siteUrl) {
+		//This class return type will change to json
+	    if(userDao.existsByEmail(user.getEmail())) {
+	    	
+			return "This email exist";
+		}
 		
-		user.getRoles().add(role);
-	}
-
-	@Override
-	public void saveRole(Role role) {
-		roleDao.save(role);
-		
-	}
-
-	@Override
-	public void register(User user, String siteUrl) {
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		String passEncode = bCryptPasswordEncoder.encode(user.getPassword());
 		user.setPassword(passEncode);
@@ -93,10 +82,18 @@ public class UserManager implements UserService, UserDetailsService {
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println(e.getMessage());
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
+		
+		return "please verify your email";
 	}
 	
 	private void sendVerificationEmail(User user, String siteURL)
@@ -143,5 +140,11 @@ public class UserManager implements UserService, UserDetailsService {
 		        return true;
 		    }
 
+	}
+
+	@Override
+	public User isEnabledUser(String username) {
+		User user = userDao.getUserByFirstName(username);
+		return user;
 	}
 }

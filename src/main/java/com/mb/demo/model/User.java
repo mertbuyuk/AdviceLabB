@@ -1,7 +1,7 @@
 package com.mb.demo.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.List;
 
 import javax.persistence.Column;
@@ -10,14 +10,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -25,6 +23,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+	
+	public enum UserType{
+	        NORMAL,
+	        ADMIN
+	    }
 	//lombok can use for getters setters but its not working sometimes on eclipse because of configs idk why
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,22 +38,18 @@ public class User {
 	
 	private boolean enabled = false;
 	
+	@Column(unique = true)
 	private String firstName;
 	private String email;
 	private String password;
 	
-	@OneToMany(fetch = FetchType.EAGER)
-	private List<Role> roles = new ArrayList<>();
+	@Column
+	private UserType userType;
 	
 	@OneToMany(fetch = FetchType.LAZY)
 	private List<Post> post = new ArrayList<>();
 	
-	public List<Role> getRoles() {
-		return roles;
-	}
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
+
 	public String getFirstName() {
 		return firstName;
 	}

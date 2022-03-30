@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mb.demo.dtos.LoginResponse;
+import com.mb.demo.model.User;
 import com.mb.jwt.AuthRequest;
 import com.mb.jwt.JwtUtil;
+import com.mb.services.concretes.UserManager;
 
 @RestController
 @RequestMapping("api/auth/")
@@ -22,18 +25,25 @@ public class LoginController {
 	
 	@Autowired
 	AuthenticationManager authenticationManager;
+	
+	@Autowired
+	UserManager userManager;
 
 	@PostMapping("/login")
-	public ResponseEntity<String> createToken(@RequestBody AuthRequest authRequest) throws Exception{
+	public ResponseEntity<?> createToken(@RequestBody AuthRequest authRequest) throws Exception{
 		try {
-			System.out.println(authRequest.getPassword());
-			System.out.println(authRequest.getUsername());
-			Authentication authenticate =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+			User user = userManager.isEnabledUser(authRequest.getUsername());
+			if(!user.isEnabled()) {
+				return Response.ok("Please Verify").body(null).build();
+			}
 			
-			return ResponseEntity.ok().body("token: "+jwtUtil.generateToken(authenticate));
+			Authentication authenticate =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+			String token = jwtUtil.generateToken(authenticate);
+			LoginResponse loginResponse = new LoginResponse(user.getId(), user.getFirstName(), user.getEmail(),"Bearer "+ token);
+			return Response.ok("Login Succes").body(loginResponse).build();
 					
 		} catch (BadCredentialsException  e) {
-			System.out.println(e.getMessage());
+			
 			return ResponseEntity.status(401).body(e.getMessage());
 		}
 	
