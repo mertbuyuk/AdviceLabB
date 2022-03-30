@@ -47,7 +47,7 @@ public class UserController {
 		User user = userManager.addPostToUser(id,post);
 		if(user ==  null) return Response.notFound("not found").build();
 	
-		
+		//burasını postresponse ile değiştir 
 		LoginResponse userResponse = new LoginResponse(user.getId(), user.getFirstName(), user.getEmail(),null);
 		return Response.ok("Succesful").body(userResponse).build();
 	}

@@ -1,5 +1,7 @@
 package com.mb.services.concretes;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,12 @@ public class PostManager implements PostService {
 	public Post findPostByFilmName(String name) {
 		
 		return postDao.findByFilmName(name);
+	}
+
+	@Override
+	public List<Post> getAllPost() {
+		
+		return postDao.findAll();
 	}
 
 }

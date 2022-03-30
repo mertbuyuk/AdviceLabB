@@ -1,5 +1,6 @@
 package com.mb.demo.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,7 +26,7 @@ public class Post {
 	@Column
 	private Long id;
 	
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
 	@JoinColumn(name = "type_id")
 	private PostType type;
 	

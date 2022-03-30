@@ -12,7 +12,6 @@ import javax.persistence.Table;
 public class PostType {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "type_id")
 	private Long id;
 	

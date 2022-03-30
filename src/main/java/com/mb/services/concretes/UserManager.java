@@ -151,9 +151,11 @@ public class UserManager implements UserService, UserDetailsService {
 	@Override
 	public User addPostToUser(Long id, Post post) {
 		User user = findById(id);
+		
 		if (user == null) {
 			return null;
 		}
+		
 		user.getPost().add(post);
 		userDao.save(user);
 		return user;

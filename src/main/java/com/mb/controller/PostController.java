@@ -1,5 +1,7 @@
 package com.mb.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,15 +13,16 @@ import com.mb.demo.model.Post;
 import com.mb.services.concretes.PostManager;
 
 @RestController
-@RequestMapping("api/post")
+@RequestMapping("api/post/")
 public class PostController {
 
 	@Autowired
 	PostManager postManager;
 	
-	@PostMapping("add")
-	private void addPost(@RequestBody Post post) {
-		postManager.addPost(post);	
+
+	@GetMapping("getAllPost")
+	private List<Post> getAll() {
+		return postManager.getAllPost();
 	}
 	
 	@GetMapping("getPost")
