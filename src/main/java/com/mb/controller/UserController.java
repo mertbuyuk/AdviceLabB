@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.mb.demo.model.Role;
 import com.mb.demo.model.User;
 import com.mb.jwt.AuthRequest;
 import com.mb.jwt.JwtUtil;
@@ -32,16 +30,6 @@ public class UserController {
 	
 	@Autowired
 	UserManager userManager;
-	
-	@PostMapping("/saveRole")
-	public void addRole(@RequestBody Role role) {
-		this.userManager.saveRole(role);
-	}
-	
-	@PostMapping("/addRoleToUser")
-	public void addRoleToUser(@RequestBody User user, Role role) {
-		this.userManager.addRoleToUser(user.getFirstName(), role.getRoleName());
-	}
 	
 	@GetMapping("/findById")
 	public Optional<User> findById(Long id) {

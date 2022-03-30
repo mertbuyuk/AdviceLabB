@@ -16,4 +16,6 @@ public interface UserDao extends JpaRepository<User,Long> {
 	
 	@Query("SELECT a FROM User a Where a.verificationCode= ?1 ")
 	User findByVerification(String code);
+	
+	boolean existsByEmail(String email);
 }

@@ -22,8 +22,9 @@ public class SignUpController {
 	
 	@PostMapping("process")
 	public String processRegister(@RequestBody User user, HttpServletRequest httpServletRequest) {
-		userManager.register(user, getSiteURL(httpServletRequest));
-		return "registered";
+		
+		String message = userManager.register(user, getSiteURL(httpServletRequest));
+		return message;
 	}
 	
 	 private String getSiteURL(HttpServletRequest request) {
