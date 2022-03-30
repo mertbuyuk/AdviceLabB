@@ -23,6 +23,8 @@ local.properties
 #Log Files
 *.log
 
+*.application.properties
+
 project.properties
 *.properties
 project.properties
