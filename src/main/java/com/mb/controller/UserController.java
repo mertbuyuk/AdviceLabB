@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.mb.demo.dtos.LoginResponse;
+import com.mb.demo.model.Post;
 import com.mb.demo.model.User;
 import com.mb.jwt.AuthRequest;
 import com.mb.jwt.JwtUtil;
@@ -35,9 +36,19 @@ public class UserController {
 
 	
 	@GetMapping("/findById")
-	public Optional<User> findById(Long id) {
-		
-		return this.userManager.findById(id);
+	public ResponseEntity<?> findById(@RequestParam Long id) {
+		User user = userManager.findById(id);
+		LoginResponse userResponse = new LoginResponse(user.getId(), user.getFirstName(), user.getEmail(),null);
+		return Response.ok("Succesful").body(userResponse).build();
 	}
 	
+	@PostMapping("/addPosttoUser")
+	public ResponseEntity<?> addPosttoUser(@RequestParam Long id,@RequestBody Post post) {
+		User user = userManager.addPostToUser(id,post);
+		if(user ==  null) return Response.notFound("not found").build();
+	
+		
+		LoginResponse userResponse = new LoginResponse(user.getId(), user.getFirstName(), user.getEmail(),null);
+		return Response.ok("Succesful").body(userResponse).build();
+	}
 }

@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 
 import com.mb.dao.UserDao;
-
+import com.mb.demo.model.Post;
 import com.mb.demo.model.User;
 import com.mb.services.abstracts.UserService;
 
@@ -40,9 +40,9 @@ public class UserManager implements UserService, UserDetailsService {
 	
 	
 	@Override
-	public Optional<User> findById(Long id) {
+	public User findById(Long id){
 		
-		return userDao.findById(id);
+		return userDao.getById(id);
 	}
 
 	@Override
@@ -145,6 +145,17 @@ public class UserManager implements UserService, UserDetailsService {
 	@Override
 	public User isEnabledUser(String username) {
 		User user = userDao.getUserByFirstName(username);
+		return user;
+	}
+
+	@Override
+	public User addPostToUser(Long id, Post post) {
+		User user = findById(id);
+		if (user == null) {
+			return null;
+		}
+		user.getPost().add(post);
+		userDao.save(user);
 		return user;
 	}
 }

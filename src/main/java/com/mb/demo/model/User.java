@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -46,9 +47,14 @@ public class User {
 	@Column
 	private UserType userType;
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Post> post = new ArrayList<>();
 	
+
+	public List<Post> getPost() {
+		return post;
+	}
 
 	public String getFirstName() {
 		return firstName;
@@ -60,9 +66,7 @@ public class User {
 	public Long getId() {
 		return id;
 	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+
 	public String getVerificationCode() {
 		return verificationCode;
 	}

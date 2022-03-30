@@ -10,7 +10,7 @@ import com.mb.demo.model.*;
 
 public interface UserDao extends JpaRepository<User,Long> {
 	
-	Optional<User> findById(Long id);
+	User getById(Long id);
 	
 	User getUserByFirstName(String username);
 	
