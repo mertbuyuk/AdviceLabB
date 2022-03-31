@@ -1,5 +1,6 @@
 package com.mb.services.abstracts;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,4 +21,6 @@ public interface UserService extends UserDetailsService{
 	User isEnabledUser(String username);
 	
 	User addPostToUser(Long id, Post post);
+	
+	List<Post> getUsersPost(Long id);
 }

@@ -1,5 +1,6 @@
 package com.mb.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,11 @@ public class UserController {
 		//burasını postresponse ile değiştir 
 		LoginResponse userResponse = new LoginResponse(user.getId(), user.getFirstName(), user.getEmail(),null);
 		return Response.ok("Succesful").body(userResponse).build();
+	}
+	
+	@GetMapping("/getPostByid")
+	public List<Post> findPostUsers(@RequestParam Long id) {
+		
+		return userManager.getUsersPost(id);
 	}
 }

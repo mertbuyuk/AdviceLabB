@@ -50,7 +50,7 @@ public class User {
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Post> post = new ArrayList<>();
-	
+
 
 	public List<Post> getPost() {
 		return post;

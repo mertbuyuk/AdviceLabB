@@ -3,6 +3,7 @@ package com.mb.services.concretes;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -160,4 +161,12 @@ public class UserManager implements UserService, UserDetailsService {
 		userDao.save(user);
 		return user;
 	}
+
+	@Override
+	public List<Post> getUsersPost(Long id) {
+		
+		return userDao.getById(id).getPost();
+	}
+	
+
 }
