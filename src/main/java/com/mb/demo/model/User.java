@@ -39,6 +39,9 @@ public class User {
 	
 	private boolean enabled = false;
 	
+	public void setId(Long id) {
+		this.id = id;
+	}
 	@Column(unique = true)
 	private String firstName;
 	private String email;

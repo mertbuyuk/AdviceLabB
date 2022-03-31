@@ -11,4 +11,6 @@ public interface PostService {
 	Post findPostByFilmName(String name);
 	
 	List<Post> getAllPost();
+	
+	Post findById(Long id);
 }

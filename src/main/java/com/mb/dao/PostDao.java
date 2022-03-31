@@ -7,5 +7,7 @@ import com.mb.demo.model.Post;
 public interface PostDao extends JpaRepository<Post, Long> {
 	
 	Post findByFilmName(String name);
+	
+	Post getById(Long id);
 
 }

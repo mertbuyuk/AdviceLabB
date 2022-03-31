@@ -32,4 +32,10 @@ public class PostManager implements PostService {
 		return postDao.findAll();
 	}
 
+	@Override
+	public Post findById(Long id) {
+	
+		return postDao.getById(id);
+	}
+
 }
