@@ -28,4 +28,8 @@ public interface UserService extends UserDetailsService{
 	List<User> getUsersFollowers(Long id);
 	
 	List<User> getUsersFollowed(Long id);
+	
+	void followById(Long fromId, Long toId);
+	
+	void deletebyId(Long fromId, Long toId);
 }

@@ -50,7 +50,7 @@ public class PostController {
 	private List<Post> searchPost(@RequestParam String keyword){
 		if (keyword!=null) {
 			//todo get posts with that keyword
-			return null;
+			return postManager.searchByName(keyword);
 		}
 		
 		return postManager.getAllPost();

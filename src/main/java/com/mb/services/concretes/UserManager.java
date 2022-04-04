@@ -195,6 +195,24 @@ public class UserManager implements UserService, UserDetailsService {
 		User followedUser = userDao.getById(user.getTo().getId());
 		return followedUser;
 	}
+
+	@Override
+	public void followById(Long fromId,Long toId) {
+		
+		User fromUser = userDao.getById(fromId);
+		User toUser = userDao.getById(toId);
+		
+		Followers followers = new Followers(fromUser,toUser);
+		
+		relationDao.save(followers);
+		
+	}
+
+	@Override
+	public void deletebyId(Long fromId, Long toId) {
+		Followers followers = relationDao.deleteRelation(fromId, toId);
+		relationDao.deleteById(followers.getId());
+	}
 	
 
 }

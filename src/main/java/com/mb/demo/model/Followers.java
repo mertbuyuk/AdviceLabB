@@ -11,8 +11,8 @@ import javax.persistence.ManyToOne;
 public class Followers {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name="from_user_fk")
@@ -22,11 +22,11 @@ public class Followers {
     @JoinColumn(name="to_user_fk")
     private User to;
 
-    public long getId() {
+    public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

@@ -71,6 +71,22 @@ public class UserController {
                 .collect(Collectors.toList());
 	}
 	
+	@PostMapping("followById")
+	public ResponseEntity<?> followById(@RequestParam Long fromId,@RequestParam  Long toId) {
+		
+		userManager.followById(fromId, toId);
+		
+		return Response.ok("Succesful").body("").build();
+	}
+	
+	@PostMapping("deleteById")
+	public ResponseEntity<?> deleteById(@RequestParam Long fromId,@RequestParam  Long toId) {
+		
+		userManager.deletebyId(fromId, toId);
+		
+		return Response.ok("Succesful").body("").build();}
+	
+	
 	private UserDto convertToUserDto(User user) {
 		UserDto dto = new UserDto(user.getId(), user.getFirstName());
 		return dto;

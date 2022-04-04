@@ -13,4 +13,6 @@ public interface PostService {
 	List<Post> getAllPost();
 	
 	Post findById(Long id);
+	
+	List<Post> searchByName(String name);
 }

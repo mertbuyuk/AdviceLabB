@@ -38,4 +38,10 @@ public class PostManager implements PostService {
 		return postDao.getById(id);
 	}
 
+	@Override
+	public List<Post> searchByName(String name) {
+ 
+		return postDao.searchPostByName(name);
+	}
+
 }
