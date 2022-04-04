@@ -1,8 +1,13 @@
 package com.mb.dao;
 
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.mb.demo.dtos.RelationDto;
+import com.mb.demo.dtos.UserDto;
 import com.mb.demo.model.*;
 
 
@@ -18,4 +23,9 @@ public interface UserDao extends JpaRepository<User,Long> {
 	boolean existsByEmail(String email);
 	
 	User getUserPostsById(Long id);
+	
+	//@Query(value= "SELECT * FROM FOLLOWING INNER JOIN USER on USER.id = FOLLOWING.USER_ID where USER_ID = ?1 AND FOLLOWED_ID <>?1",nativeQuery = true)
+	//List<User> getUserFollowersId(Long id);
+	
+	
 }

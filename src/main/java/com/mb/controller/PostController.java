@@ -73,9 +73,9 @@ public class PostController {
                 .collect(Collectors.toList());
 	}
 	
+	//this method will move to its own class
 	private CommentDto convertToDto(Comment commnet) {
 		CommentDto commentDto = new CommentDto(commnet.getId(),commnet.getUser().getId(),commnet.getPost().getId(), commnet.getComment(), commnet.getUser().getFirstName());
-	    
 	    return commentDto;
 	}
 }

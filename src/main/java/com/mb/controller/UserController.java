@@ -2,6 +2,8 @@ package com.mb.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mb.demo.dtos.LoginResponse;
+import com.mb.demo.dtos.UserDto;
 import com.mb.demo.model.Post;
 import com.mb.demo.model.User;
 import com.mb.jwt.AuthRequest;
@@ -36,14 +39,14 @@ public class UserController {
 	UserManager userManager;
 
 	
-	@GetMapping("/findById")
+	@GetMapping("findById")
 	public ResponseEntity<?> findById(@RequestParam Long id) {
 		User user = userManager.findById(id);
 		LoginResponse userResponse = new LoginResponse(user.getId(), user.getFirstName(), user.getEmail(),null);
 		return Response.ok("Succesful").body(userResponse).build();
 	}
 	
-	@PostMapping("/addPosttoUser")
+	@PostMapping("addPosttoUser")
 	public ResponseEntity<?> addPosttoUser(@RequestParam Long id,@RequestBody Post post) {
 		User user = userManager.addPostToUser(id,post);
 		if(user ==  null) return Response.notFound("not found").build();
@@ -53,9 +56,23 @@ public class UserController {
 		return Response.ok("Succesful").body(userResponse).build();
 	}
 	
-	@GetMapping("/getPostByid")
+	@GetMapping("getPostByid")
 	public List<Post> findPostUsers(@RequestParam Long id) {
 		
 		return userManager.getUsersPost(id);
+	}
+	
+	@GetMapping("getFollowedList")
+	public List<UserDto> getFollowedList(@RequestParam Long id) {
+		List<User> s = userManager.getUsersFollowed(id);
+		
+		 return s.stream()
+                .map(this::convertToUserDto)
+                .collect(Collectors.toList());
+	}
+	
+	private UserDto convertToUserDto(User user) {
+		UserDto dto = new UserDto(user.getId(), user.getFirstName());
+		return dto;
 	}
 }

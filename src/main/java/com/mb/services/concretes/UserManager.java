@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -22,8 +24,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
+import com.mb.dao.RelationDao;
 import com.mb.dao.UserDao;
+import com.mb.demo.dtos.RelationDto;
+import com.mb.demo.dtos.UserDto;
+import com.mb.demo.model.Followers;
 import com.mb.demo.model.Post;
 import com.mb.demo.model.User;
 import com.mb.services.abstracts.UserService;
@@ -39,6 +44,8 @@ public class UserManager implements UserService, UserDetailsService {
 	@Autowired
 	private JavaMailSender mailSender;
 	
+	@Autowired
+	RelationDao relationDao;
 	
 	@Override
 	public User findById(Long id){
@@ -166,6 +173,27 @@ public class UserManager implements UserService, UserDetailsService {
 	public List<Post> getUsersPost(Long id) {
 		
 		return userDao.getById(id).getPost();
+	}
+
+	@Override
+	public List<User> getUsersFollowers(Long id) {
+		
+		
+		return null;// userDao.getUserFollowersId(id);
+	}
+
+	@Override
+	public List<User> getUsersFollowed(Long id) {
+		
+		List<Followers> users = relationDao.getUserFollowedId(id); 
+
+		return users.stream()
+		        .map(this::findFolloweds)
+		        .collect(Collectors.toList()); }
+	
+	private User findFolloweds(Followers user) {
+		User followedUser = userDao.getById(user.getTo().getId());
+		return followedUser;
 	}
 	
 
