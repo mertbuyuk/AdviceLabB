@@ -46,18 +46,17 @@ public class User {
 	private String verificationCode; 
 	
 	private boolean enabled = false;
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
+
 	@Column(unique = true)
 	private String firstName;
 	private String email;
 	private String password;
 	
+	@Column(nullable = true, length = 64)
+	private String photo;
+	
 	@Column
 	private UserType userType;
-	
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Post> post = new ArrayList<>();
@@ -71,6 +70,19 @@ public class User {
 
     @OneToMany(mappedBy="from",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Followers> followeds;
+    
+    
+	public void setId(Long id) {
+		this.id = id;
+	}
+    
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
     
 	public void setFollowers(List<Followers> followers) {
 		this.followers = followers;

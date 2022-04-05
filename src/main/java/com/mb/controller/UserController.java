@@ -1,5 +1,6 @@
 package com.mb.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mb.demo.dtos.LoginResponse;
 import com.mb.demo.dtos.UserDto;
@@ -90,5 +92,32 @@ public class UserController {
 	private UserDto convertToUserDto(User user) {
 		UserDto dto = new UserDto(user.getId(), user.getFirstName());
 		return dto;
+	}
+	
+	@PostMapping("save/photo")
+    public ResponseEntity<?> saveUserPhoto(@RequestBody User user,
+            @RequestParam("image") MultipartFile multipartFile) {
+		
+		try {
+			userManager.saveUserPhoto(user, multipartFile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+		
+		return Response.ok("Succes").body("").build();
+		
+	}
+	
+	@PostMapping("get/photo")
+    public ResponseEntity<?> getUserPhoto(@RequestBody User user,
+            @RequestParam("image") MultipartFile multipartFile) {
+		
+		String path = userManager.getUserPhoto(user.getId());
+		if(path == null) return Response.notFound("User null").body("").build();
+		
+		return Response.ok("Succes").body(path).build();
+		
 	}
 }

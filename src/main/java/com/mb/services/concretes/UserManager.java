@@ -1,5 +1,6 @@
 package com.mb.services.concretes;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,6 +24,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mb.dao.RelationDao;
 import com.mb.dao.UserDao;
@@ -32,6 +35,7 @@ import com.mb.demo.model.Followers;
 import com.mb.demo.model.Post;
 import com.mb.demo.model.User;
 import com.mb.services.abstracts.UserService;
+import com.mb.utils.FileUploadUtil;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -114,7 +118,7 @@ public class UserManager implements UserService, UserDetailsService {
 	            + "Please click the link below to verify your registration:<br>"
 	            + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
 	            + "Thank you,<br>"
-	            + "Your company name.";
+	            + "M Tech.";
 	     
 	    MimeMessage message = mailSender.createMimeMessage();
 	    MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -213,6 +217,33 @@ public class UserManager implements UserService, UserDetailsService {
 		Followers followers = relationDao.deleteRelation(fromId, toId);
 		relationDao.deleteById(followers.getId());
 	}
-	
 
+	@Override
+	public String saveUserPhoto(User user, MultipartFile file) throws IOException {
+		
+		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+		
+		user.setPhoto(fileName);
+		 
+		User savedUser = userDao.save(user);
+		
+		String uploadDir = "user-photos/" + savedUser.getId();
+		 
+        FileUploadUtil.saveFile(uploadDir, fileName, file);
+		
+		return null;
+	}
+
+	@Override
+	public String getUserPhoto(Long id) {
+		if(id==null) return "User null";
+		
+		User user = userDao.getById(id); 
+		
+		if(user == null) {
+			return "Not Found";
+		}
+	
+		return user.getPhoto();
+	}
 }
