@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mb.demo.model.Message;
 import com.mb.demo.model.Post;
 import com.mb.demo.model.User;
 
@@ -17,7 +18,7 @@ public interface UserService extends UserDetailsService{
 	
 	User findById(Long id);
 	
-	String register(User user, String siteUrl) ;
+	Message register(User user, String siteUrl) ;
 	
 	boolean verify(String code);
 	

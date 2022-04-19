@@ -15,6 +15,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,6 +33,7 @@ import com.mb.dao.UserDao;
 import com.mb.demo.dtos.RelationDto;
 import com.mb.demo.dtos.UserDto;
 import com.mb.demo.model.Followers;
+import com.mb.demo.model.Message;
 import com.mb.demo.model.Post;
 import com.mb.demo.model.User;
 import com.mb.services.abstracts.UserService;
@@ -73,11 +75,13 @@ public class UserManager implements UserService, UserDetailsService {
 	}
 
 	@Override
-	public String register(User user, String siteUrl) {
+	public Message register(User user, String siteUrl) {
+		Message message = new Message("");
 		//This class return type will change to json
 	    if(userDao.existsByEmail(user.getEmail())) {
-	    	
-			return "This email exist";
+	    	message.setMessage("This email exist");
+	    	message.setCode(HttpStatus.CONFLICT);
+			return message;
 		}
 		
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -104,8 +108,10 @@ public class UserManager implements UserService, UserDetailsService {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
+		message.setCode(HttpStatus.OK);
+		message.setMessage("Please verify your email");
 		
-		return "please verify your email";
+		return message ;
 	}
 	
 	private void sendVerificationEmail(User user, String siteURL)

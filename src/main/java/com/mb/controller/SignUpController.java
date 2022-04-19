@@ -4,12 +4,15 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mb.demo.model.Message;
 import com.mb.demo.model.User;
 import com.mb.services.concretes.UserManager;
 
@@ -21,10 +24,13 @@ public class SignUpController {
 	UserManager userManager;
 	
 	@PostMapping("process")
-	public String processRegister(@RequestBody User user, HttpServletRequest httpServletRequest) {
-		
-		String message = userManager.register(user, getSiteURL(httpServletRequest));
-		return message;
+	public ResponseEntity<?> processRegister(@RequestBody User user, HttpServletRequest httpServletRequest) {
+	
+		Message message = userManager.register(user, getSiteURL(httpServletRequest));
+		Response response = new Response();
+		response.setStatus(message.getCode());
+		response.setResponseBody(message.getMessage());
+		return response.build();
 	}
 	
 	 private String getSiteURL(HttpServletRequest request) {

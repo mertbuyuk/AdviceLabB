@@ -12,8 +12,8 @@ import java.util.Map;
 
 public class Response {
 
-	private String message;
-    private String reason;
+	private String message = "";
+    private String reason = "";
     @JsonIgnore
     private HttpStatus status;
     private Object responseBody;
