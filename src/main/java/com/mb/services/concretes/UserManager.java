@@ -188,9 +188,12 @@ public class UserManager implements UserService, UserDetailsService {
 	@Override
 	public List<User> getUsersFollowers(Long id) {
 		
+		List<Followers> users = relationDao.getUserFollowerId(id); 
+
+		return users.stream()
+		        .map(this::findFollowers)
+		        .collect(Collectors.toList()); }
 		
-		return null;// userDao.getUserFollowersId(id);
-	}
 
 	@Override
 	public List<User> getUsersFollowed(Long id) {
@@ -203,6 +206,11 @@ public class UserManager implements UserService, UserDetailsService {
 	
 	private User findFolloweds(Followers user) {
 		User followedUser = userDao.getById(user.getTo().getId());
+		return followedUser;
+	}
+	
+	private User findFollowers(Followers user) {
+		User followedUser = userDao.getById(user.getFrom().getId());
 		return followedUser;
 	}
 
