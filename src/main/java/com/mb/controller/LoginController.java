@@ -1,6 +1,7 @@
 package com.mb.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,7 +35,10 @@ public class LoginController {
 		try {
 			User user = userManager.isEnabledUser(authRequest.getUsername());
 			if(!user.isEnabled()) {
-				return Response.ok("Please Verify").body(null).build();
+				Response response = new Response();
+				response.setStatus(HttpStatus.UNAUTHORIZED);
+				response.setResponseBody("Please Verify your email");
+				return response.build();
 			}
 			
 			Authentication authenticate =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));

@@ -15,12 +15,15 @@ public interface UserDao extends JpaRepository<User,Long> {
 	
 	User getById(Long id);
 	
+	@Query("SELECT a FROM User a Where a.firstName= ?1")
 	User getUserByFirstName(String username);
 	
-	@Query("SELECT a FROM User a Where a.verificationCode= ?1 ")
+	@Query("SELECT a FROM User a Where a.verificationCode= ?1")
 	User findByVerification(String code);
 	
 	boolean existsByEmail(String email);
+	
+	boolean existsByFirstName(String name);
 	
 	User getUserPostsById(Long id);
 	

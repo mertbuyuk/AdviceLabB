@@ -78,8 +78,8 @@ public class UserManager implements UserService, UserDetailsService {
 	public Message register(User user, String siteUrl) {
 		Message message = new Message("");
 		//This class return type will change to json
-	    if(userDao.existsByEmail(user.getEmail())) {
-	    	message.setMessage("This email exist");
+	    if(userDao.existsByEmail(user.getEmail()) || userDao.existsByFirstName(user.getFirstName()) ) {
+	    	message.setMessage("This email/nickname exist");
 	    	message.setCode(HttpStatus.CONFLICT);
 			return message;
 		}
