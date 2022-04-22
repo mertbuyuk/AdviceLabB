@@ -1,13 +1,21 @@
 package com.mb.demo.model;
 
+import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
 
-@Entity
+@SqlResultSetMapping(name="RelationMapping",
+classes = {
+ @ConstructorResult(targetClass = Relation.class,
+   columns = {@ColumnResult(name="name"), @ColumnResult(name="street")}
+ )}
+)
+@Entity(name = "followers")
 public class Followers {
 
     @Id

@@ -1,4 +1,4 @@
-package com.mb.controller;
+package com.mb.demo.responses;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.http.HttpStatus;

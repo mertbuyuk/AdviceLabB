@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -35,6 +37,7 @@ import com.mb.demo.dtos.UserDto;
 import com.mb.demo.model.Followers;
 import com.mb.demo.model.Message;
 import com.mb.demo.model.Post;
+import com.mb.demo.model.Relation;
 import com.mb.demo.model.User;
 import com.mb.services.abstracts.UserService;
 import com.mb.utils.FileUploadUtil;
@@ -52,6 +55,9 @@ public class UserManager implements UserService, UserDetailsService {
 	
 	@Autowired
 	RelationDao relationDao;
+	
+	@Autowired 
+	EntityManager entityManager;
 	
 	@Override
 	public User findById(Long id){
@@ -223,7 +229,6 @@ public class UserManager implements UserService, UserDetailsService {
 		Followers followers = new Followers(fromUser,toUser);
 		
 		relationDao.save(followers);
-		
 	}
 
 	@Override
@@ -259,5 +264,12 @@ public class UserManager implements UserService, UserDetailsService {
 		}
 	
 		return user.getPhoto();
+	}
+
+	@Override
+	public Collection<Relation> getCountOfRelations(Long id) {
+	
+		
+		return relationDao.getCountofRelations(id);
 	}
 }

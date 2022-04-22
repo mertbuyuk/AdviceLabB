@@ -1,6 +1,7 @@
 package com.mb.controller;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -28,7 +29,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mb.demo.dtos.LoginResponse;
 import com.mb.demo.dtos.UserDto;
 import com.mb.demo.model.Post;
+import com.mb.demo.model.Relation;
 import com.mb.demo.model.User;
+import com.mb.demo.responses.Response;
 import com.mb.jwt.AuthRequest;
 import com.mb.jwt.JwtUtil;
 import com.mb.services.abstracts.UserService;
@@ -42,8 +45,8 @@ public class UserController {
 	UserManager userManager;
 
 	
-	@GetMapping("findById")
-	public ResponseEntity<?> findById(@RequestParam Long id) {
+	@GetMapping("findById/{id}")
+	public ResponseEntity<?> findById(@PathVariable Long id) {
 		User user = userManager.findById(id);
 		LoginResponse userResponse = new LoginResponse(user.getId(), user.getFirstName(), user.getEmail(),null);
 		return Response.ok("Succesful").body(userResponse).build();
@@ -66,21 +69,25 @@ public class UserController {
 	}
 	
 	@GetMapping("getFollowedList/{id}")
-	public List<UserDto> getFollowedList(@PathVariable Long id) {
+	public ResponseEntity<?> getFollowedList(@PathVariable Long id) {
 		List<User> s = userManager.getUsersFollowed(id);
 		
-		 return s.stream()
+		List<UserDto> userDtoList = s.stream()
                 .map(this::convertToUserDto)
                 .collect(Collectors.toList());
+		
+		 return  Response.ok("Succesful").body(userDtoList).build();
 	}
 	
-	@GetMapping("getFollowerList")
-	public List<UserDto> getFollowerList(@PathVariable Long id) {
+	@GetMapping("getFollowerList/{id}")
+	public ResponseEntity<?> getFollowerList(@PathVariable Long id) {
 		List<User> s = userManager.getUsersFollowers(id);
 		
-		 return s.stream()
+		List<UserDto> userDtoList = s.stream()
                 .map(this::convertToUserDto)
                 .collect(Collectors.toList());
+		
+		 return  Response.ok("Succesful").body(userDtoList).build();
 	}
 	
 	@PostMapping("followById")
@@ -130,4 +137,15 @@ public class UserController {
 		return Response.ok("Succes").body(path).build();
 		
 	}
+	
+	@GetMapping("getCount/{id}")
+	public ResponseEntity<?> getCountofRelations(@PathVariable Long id){
+	
+		//List<?> list = userManager.getCountOfRelations(id);
+		
+		Collection<Relation> relation =userManager.getCountOfRelations(id);
+	//	relation.setFollowing((Long) list.get(0));
+	
+		
+		return Response.ok("Succesfull").body(relation).build();	}	
 }

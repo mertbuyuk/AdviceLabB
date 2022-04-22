@@ -6,8 +6,30 @@ public class LoginResponse {
 	private String firstName;
 	private String email;
 	private String jwt;
+	private int followerCont;
+	private int followedCont;
 	
 	
+	public int getFollowedCont() {
+		return followedCont;
+	}
+
+
+	public void setFollowedCont(int followedCont) {
+		this.followedCont = followedCont;
+	}
+
+
+	public int getFollowerCont() {
+		return followerCont;
+	}
+
+
+	public void setFollowerCont(int followerCont) {
+		this.followerCont = followerCont;
+	}
+
+
 	public Long getId() {
 		return id;
 	}

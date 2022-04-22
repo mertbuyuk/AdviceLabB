@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mb.demo.model.PostType;
+import com.mb.demo.responses.Response;
 import com.mb.services.concretes.PostTypeManager;
 
 @RestController

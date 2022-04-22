@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mb.demo.dtos.LoginResponse;
 import com.mb.demo.model.User;
+import com.mb.demo.responses.Response;
 import com.mb.jwt.AuthRequest;
 import com.mb.jwt.JwtUtil;
 import com.mb.services.concretes.UserManager;
@@ -40,6 +41,7 @@ public class LoginController {
 				response.setResponseBody("Please Verify your email");
 				return response.build();
 			}
+			
 			
 			Authentication authenticate =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 			String token = jwtUtil.generateToken(authenticate);

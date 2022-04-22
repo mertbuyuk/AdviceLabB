@@ -1,6 +1,7 @@
 package com.mb.services.abstracts;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -9,8 +10,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mb.demo.model.Followers;
 import com.mb.demo.model.Message;
 import com.mb.demo.model.Post;
+import com.mb.demo.model.Relation;
 import com.mb.demo.model.User;
 
 public interface UserService extends UserDetailsService{
@@ -31,6 +34,8 @@ public interface UserService extends UserDetailsService{
 	List<User> getUsersFollowers(Long id);
 	
 	List<User> getUsersFollowed(Long id);
+	
+	Collection<Relation> getCountOfRelations(Long id);
 	
 	void followById(Long fromId, Long toId);
 	
