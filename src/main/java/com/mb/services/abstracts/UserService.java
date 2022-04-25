@@ -35,7 +35,7 @@ public interface UserService extends UserDetailsService{
 	
 	List<User> getUsersFollowed(Long id);
 	
-	Collection<Relation> getCountOfRelations(Long id);
+	Relation getCountOfRelations(Long id);
 	
 	void followById(Long fromId, Long toId);
 	

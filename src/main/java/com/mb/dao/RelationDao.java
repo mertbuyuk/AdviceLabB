@@ -27,6 +27,9 @@ public interface RelationDao  extends CrudRepository<Followers, Long> {
     //(SELECT COUNT(TO_USER_FK) FROM FOLLOWERS WHERE FROM_USER_FK = 35) AS FOLLOWING,
     //(SELECT COUNT(FROM_USER_FK )  FROM FOLLOWERS WHERE TO_USER_FK = 35) AS FOLLOWER 
 	
-    @Query(value = "SELECT (SELECT COUNT(f.id) FROM FOLLOWERS f WHERE f.FROM_USER_FK = ?1) as follower ,(SELECT COUNT(t.id) FROM FOLLOWERS t WHERE t.TO_USER_FK = ?1 ) as following",nativeQuery = true)
-    Collection<Relation> getCountofRelations(Long fromId);
+    @Query(value = "SELECT COUNT(id) FROM FOLLOWERS WHERE TO_USER_FK = ?1",nativeQuery = true)
+    long getCountofFollower(Long fromId);
+    
+    @Query(value = "SELECT COUNT(id) FROM FOLLOWERS  WHERE FROM_USER_FK = ?1",nativeQuery = true)
+    long getCountofFollowing(Long fromId);
 }

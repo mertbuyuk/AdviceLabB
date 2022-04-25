@@ -267,9 +267,12 @@ public class UserManager implements UserService, UserDetailsService {
 	}
 
 	@Override
-	public Collection<Relation> getCountOfRelations(Long id) {
-	
+	public Relation getCountOfRelations(Long id) {
+
+		Relation relation = new Relation();
+		relation.setFollower(relationDao.getCountofFollower(id));
+		relation.setFollowing(relationDao.getCountofFollowing(id));
 		
-		return relationDao.getCountofRelations(id);
+		return relation;
 	}
 }

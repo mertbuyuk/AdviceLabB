@@ -27,10 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mb.demo.dtos.LoginResponse;
+import com.mb.demo.dtos.RelationDto;
 import com.mb.demo.dtos.UserDto;
 import com.mb.demo.model.Post;
 import com.mb.demo.model.Relation;
 import com.mb.demo.model.User;
+import com.mb.demo.responses.PostResponse;
 import com.mb.demo.responses.Response;
 import com.mb.jwt.AuthRequest;
 import com.mb.jwt.JwtUtil;
@@ -52,8 +54,8 @@ public class UserController {
 		return Response.ok("Succesful").body(userResponse).build();
 	}
 	
-	@PostMapping("addPosttoUser")
-	public ResponseEntity<?> addPosttoUser(@RequestParam Long id,@RequestBody Post post) {
+	@PostMapping("addPosttoUser/{id}")
+	public ResponseEntity<?> addPosttoUser(@PathVariable Long id,@RequestBody Post post) {
 		User user = userManager.addPostToUser(id,post);
 		if(user ==  null) return Response.notFound("not found").build();
 	
@@ -62,10 +64,16 @@ public class UserController {
 		return Response.ok("Succesful").body(userResponse).build();
 	}
 	
-	@GetMapping("getPostByid")
-	public List<Post> findPostUsers(@RequestParam Long id) {
+	@GetMapping("getPostById/{id}")
+	public ResponseEntity<?>  findPostUsers(@PathVariable Long id) {
 		
-		return userManager.getUsersPost(id);
+		List<Post> list =   userManager.getUsersPost(id);
+		
+		List<PostResponse> responsePost = list.stream()
+				.map(this::converToPostResponse)
+                .collect(Collectors.toList());
+				
+		return Response.ok("Succesful").body(responsePost).build();
 	}
 	
 	@GetMapping("getFollowedList/{id}")
@@ -111,6 +119,11 @@ public class UserController {
 		return dto;
 	}
 	
+	private PostResponse converToPostResponse(Post post) {
+		PostResponse postResponse = new PostResponse(post.getId(), post.getFilmName());
+		return postResponse;
+	}
+	
 	@PostMapping("save/photo")
     public ResponseEntity<?> saveUserPhoto(@RequestBody User user,
             @RequestParam("image") MultipartFile multipartFile) {
@@ -140,12 +153,8 @@ public class UserController {
 	
 	@GetMapping("getCount/{id}")
 	public ResponseEntity<?> getCountofRelations(@PathVariable Long id){
-	
-		//List<?> list = userManager.getCountOfRelations(id);
 		
-		Collection<Relation> relation =userManager.getCountOfRelations(id);
-	//	relation.setFollowing((Long) list.get(0));
-	
+	    Relation relation =userManager.getCountOfRelations(id);
 		
 		return Response.ok("Succesfull").body(relation).build();	}	
 }
