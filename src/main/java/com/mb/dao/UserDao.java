@@ -27,6 +27,9 @@ public interface UserDao extends JpaRepository<User,Long> {
 	
 	User getUserPostsById(Long id);
 	
+	@Query("SELECT a FROM User a Where a.firstName LIKE %?1%")
+	List<User> searchUser(String name);
+	
 	//@Query(value= "SELECT * FROM FOLLOWING INNER JOIN USER on USER.id = FOLLOWING.USER_ID where USER_ID = ?1 AND FOLLOWED_ID <>?1",nativeQuery = true)
 	//List<User> getUserFollowersId(Long id);
 	

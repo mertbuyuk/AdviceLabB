@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +17,9 @@ import com.mb.dao.CommentDao;
 import com.mb.demo.dtos.CommentDto;
 import com.mb.demo.model.Comment;
 import com.mb.demo.model.Post;
+
 import com.mb.demo.model.User;
+import com.mb.demo.responses.Response;
 import com.mb.services.concretes.CommentManager;
 import com.mb.services.concretes.PostManager;
 import com.mb.services.concretes.UserManager;
@@ -34,11 +37,10 @@ public class PostController {
 	@Autowired
 	CommentManager commentManager;
 	
-
-
 	@GetMapping("getAllPost")
-	private List<Post> getAll() {
-		return postManager.getAllPost();
+	private ResponseEntity<?> getAll() {
+		//burayı sayfa sayfa al
+		return Response.ok("success").body(postManager.getAllPost()).build();
 	}
 	
 	@GetMapping("getPost")

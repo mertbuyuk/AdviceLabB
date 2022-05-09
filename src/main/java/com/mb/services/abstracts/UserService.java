@@ -35,13 +35,15 @@ public interface UserService extends UserDetailsService{
 	
 	List<User> getUsersFollowed(Long id);
 	
+	List<User> searchByName(String username);
+	
 	Relation getCountOfRelations(Long id);
 	
 	void followById(Long fromId, Long toId);
 	
 	void deletebyId(Long fromId, Long toId);
 	
-	String saveUserPhoto(User user, MultipartFile file) throws IOException;
+	String saveUserPhoto(Long id, MultipartFile file) throws IOException;
 	
 	String getUserPhoto(Long id);
 }

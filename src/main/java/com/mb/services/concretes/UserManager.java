@@ -238,8 +238,9 @@ public class UserManager implements UserService, UserDetailsService {
 	}
 
 	@Override
-	public String saveUserPhoto(User user, MultipartFile file) throws IOException {
+	public String saveUserPhoto(Long id, MultipartFile file) throws IOException {
 		
+		User user = userDao.getById(id);
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 		
 		user.setPhoto(fileName);
@@ -275,4 +276,13 @@ public class UserManager implements UserService, UserDetailsService {
 		
 		return relation;
 	}
+
+	@Override
+	public List<User> searchByName(String username) {
+		
+		List<User> users = userDao.searchUser(username); 
+
+		return users; }
+	
+
 }

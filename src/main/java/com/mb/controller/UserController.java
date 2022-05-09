@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.Set;import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mb.demo.body.RelationBody;
 import com.mb.demo.dtos.LoginResponse;
 import com.mb.demo.dtos.RelationDto;
 import com.mb.demo.dtos.UserDto;
+import com.mb.demo.model.Followers;
 import com.mb.demo.model.Post;
 import com.mb.demo.model.Relation;
 import com.mb.demo.model.User;
@@ -99,17 +101,17 @@ public class UserController {
 	}
 	
 	@PostMapping("followById")
-	public ResponseEntity<?> followById(@RequestParam Long fromId,@RequestParam  Long toId) {
+	public ResponseEntity<?> followById(@RequestBody RelationBody relBody) {
 		
-		userManager.followById(fromId, toId);
+		userManager.followById(relBody.getFromId(), relBody.getToId());
 		
 		return Response.ok("Succesful").body("").build();
 	}
 	
 	@PostMapping("deleteById")
-	public ResponseEntity<?> deleteById(@RequestParam Long fromId,@RequestParam  Long toId) {
+	public ResponseEntity<?> deleteById(@RequestBody RelationBody relBody) {
 		
-		userManager.deletebyId(fromId, toId);
+		userManager.deletebyId(relBody.getFromId(), relBody.getToId());
 		
 		return Response.ok("Succesful").body("").build();}
 	
@@ -124,12 +126,12 @@ public class UserController {
 		return postResponse;
 	}
 	
-	@PostMapping("save/photo")
-    public ResponseEntity<?> saveUserPhoto(@RequestBody User user,
-            @RequestParam("image") MultipartFile multipartFile) {
+	@PostMapping("save/photo/{id}")
+    public ResponseEntity<?> saveUserPhoto(@PathVariable Long id,
+    		@RequestParam(value = "file") MultipartFile multipartFile) {
 		
 		try {
-			userManager.saveUserPhoto(user, multipartFile);
+			userManager.saveUserPhoto(id, multipartFile);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -137,7 +139,6 @@ public class UserController {
 		}
 		
 		return Response.ok("Succes").body("").build();
-		
 	}
 	
 	@PostMapping("get/photo")
@@ -157,4 +158,23 @@ public class UserController {
 	    Relation relation =userManager.getCountOfRelations(id);
 		
 		return Response.ok("Succesfull").body(relation).build();	}	
+	
+	@GetMapping("searchUsers")
+	public ResponseEntity<?> searchUsers(@RequestParam String keyword){
+		
+		List<User> users = userManager.searchByName(keyword);
+		
+		List<UserDto> userDto = users.stream()
+				.map(this::toUserDto)
+				.collect(Collectors.toList());
+		System.out.println(userDto.size());
+		return Response.ok("success").body(userDto).build();
+	}
+	
+  	public UserDto toUserDto(User user) {
+  	  
+ 		 UserDto userDto = new UserDto(user.getId(),user.getFirstName());
+ 		 
+ 		return userDto;
+ }
 }
