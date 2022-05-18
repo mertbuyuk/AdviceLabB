@@ -75,6 +75,16 @@ public class PostController {
                 .collect(Collectors.toList());
 	}
 	
+	@GetMapping("getPostById")
+	private ResponseEntity<?> getPostById(@RequestParam Long id){
+		Post post = postManager.findById(id) ;
+		if(post != null) {
+			
+			return Response.ok("Success").body(post).build();
+		}
+		return  Response.notFound("fail").body("").build();
+	}
+	
 	//this method will move to its own class
 	private CommentDto convertToDto(Comment commnet) {
 		CommentDto commentDto = new CommentDto(commnet.getId(),commnet.getUser().getId(),commnet.getPost().getId(), commnet.getComment(), commnet.getUser().getFirstName());

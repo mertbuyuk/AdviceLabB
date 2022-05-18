@@ -8,8 +8,20 @@ public class LoginResponse {
 	private String jwt;
 	private int followerCont;
 	private int followedCont;
+	private byte[] photo;
 	
 	
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+
 	public int getFollowedCont() {
 		return followedCont;
 	}
@@ -70,10 +82,11 @@ public class LoginResponse {
 	}
 
 
-	public LoginResponse(Long id, String firstName,String email,String jwt) {
+	public LoginResponse(Long id, String firstName,String email,String jwt,byte[] photo) {
 		this.id = id;
 		this.firstName = firstName;
 		this.email = email;
 		this.jwt = jwt;
+		this.photo = photo;
 	}
 }

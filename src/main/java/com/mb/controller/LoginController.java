@@ -45,7 +45,7 @@ public class LoginController {
 			
 			Authentication authenticate =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 			String token = jwtUtil.generateToken(authenticate);
-			LoginResponse loginResponse = new LoginResponse(user.getId(), user.getFirstName(), user.getEmail(),"Bearer "+ token);
+			LoginResponse loginResponse = new LoginResponse(user.getId(), user.getFirstName(), user.getEmail(),"Bearer "+ token,null);
 			return Response.ok("Login Succes").body(loginResponse).build();
 					
 		} catch (BadCredentialsException  e) {

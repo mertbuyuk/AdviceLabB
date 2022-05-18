@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -53,11 +54,20 @@ public class User {
 	private String email;
 	private String password;
 
-	@Column(nullable = true, length = 64)
-	private String photo;
+	@Lob
+	@Column(name = "image", unique = false, nullable = true, length = 100000)
+	private byte[] photo;
 
 	@Column
 	private UserType userType;
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Post> post = new ArrayList<>();
@@ -74,14 +84,6 @@ public class User {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
 	}
 
 	public void setFollowers(List<Followers> followers) {

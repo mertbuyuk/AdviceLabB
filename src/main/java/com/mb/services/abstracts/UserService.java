@@ -9,6 +9,7 @@ import java.util.Set;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.mb.demo.model.Followers;
 import com.mb.demo.model.Message;
@@ -43,7 +44,7 @@ public interface UserService extends UserDetailsService{
 	
 	void deletebyId(Long fromId, Long toId);
 	
-	String saveUserPhoto(Long id, MultipartFile file) throws IOException;
+	void saveUserPhoto(Long id, MultipartFile file) throws IOException;
 	
-	String getUserPhoto(Long id);
+	byte[] getUserPhoto(Long id);
 }

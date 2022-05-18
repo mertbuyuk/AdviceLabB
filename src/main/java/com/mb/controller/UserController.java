@@ -52,7 +52,7 @@ public class UserController {
 	@GetMapping("findById/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
 		User user = userManager.findById(id);
-		LoginResponse userResponse = new LoginResponse(user.getId(), user.getFirstName(), user.getEmail(),null);
+		LoginResponse userResponse = new LoginResponse(user.getId(), user.getFirstName(), user.getEmail(),null,user.getPhoto());
 		return Response.ok("Succesful").body(userResponse).build();
 	}
 	
@@ -62,7 +62,7 @@ public class UserController {
 		if(user ==  null) return Response.notFound("not found").build();
 	
 		//burasını postresponse ile değiştir 
-		LoginResponse userResponse = new LoginResponse(user.getId(), user.getFirstName(), user.getEmail(),null);
+		LoginResponse userResponse = new LoginResponse(user.getId(), user.getFirstName(), user.getEmail(),null,null);
 		return Response.ok("Succesful").body(userResponse).build();
 	}
 	
@@ -115,20 +115,9 @@ public class UserController {
 		
 		return Response.ok("Succesful").body("").build();}
 	
-	
-	private UserDto convertToUserDto(User user) {
-		UserDto dto = new UserDto(user.getId(), user.getFirstName());
-		return dto;
-	}
-	
-	private PostResponse converToPostResponse(Post post) {
-		PostResponse postResponse = new PostResponse(post.getId(), post.getFilmName());
-		return postResponse;
-	}
-	
-	@PostMapping("save/photo/{id}")
+	@PostMapping("savephoto/{id}")
     public ResponseEntity<?> saveUserPhoto(@PathVariable Long id,
-    		@RequestParam(value = "file") MultipartFile multipartFile) {
+    		@RequestParam("image") MultipartFile multipartFile) {
 		
 		try {
 			userManager.saveUserPhoto(id, multipartFile);
@@ -141,11 +130,10 @@ public class UserController {
 		return Response.ok("Succes").body("").build();
 	}
 	
-	@PostMapping("get/photo")
-    public ResponseEntity<?> getUserPhoto(@RequestBody User user,
-            @RequestParam("image") MultipartFile multipartFile) {
+	@GetMapping("getphoto/{id}")
+    public ResponseEntity<?> getUserPhoto(@PathVariable Long id) {
 		
-		String path = userManager.getUserPhoto(user.getId());
+		byte[] path = userManager.getUserPhoto(id);
 		if(path == null) return Response.notFound("User null").body("").build();
 		
 		return Response.ok("Succes").body(path).build();
@@ -177,4 +165,14 @@ public class UserController {
  		 
  		return userDto;
  }
+  	
+  	private UserDto convertToUserDto(User user) {
+		UserDto dto = new UserDto(user.getId(), user.getFirstName());
+		return dto;
+	}
+	
+	private PostResponse converToPostResponse(Post post) {
+		PostResponse postResponse = new PostResponse(post.getId(), post.getFilmName());
+		return postResponse;
+	}
 }
