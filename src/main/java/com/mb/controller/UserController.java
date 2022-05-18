@@ -83,7 +83,7 @@ public class UserController {
 		List<User> s = userManager.getUsersFollowed(id);
 		
 		List<UserDto> userDtoList = s.stream()
-                .map(this::convertToUserDto)
+                .map(this::toUserDto)
                 .collect(Collectors.toList());
 		
 		 return  Response.ok("Succesful").body(userDtoList).build();
@@ -94,7 +94,7 @@ public class UserController {
 		List<User> s = userManager.getUsersFollowers(id);
 		
 		List<UserDto> userDtoList = s.stream()
-                .map(this::convertToUserDto)
+                .map(this::toUserDto)
                 .collect(Collectors.toList());
 		
 		 return  Response.ok("Succesful").body(userDtoList).build();
@@ -161,7 +161,7 @@ public class UserController {
 	
   	public UserDto toUserDto(User user) {
   	  
- 		 UserDto userDto = new UserDto(user.getId(),user.getFirstName());
+ 		 UserDto userDto = new UserDto(user.getId(),user.getFirstName(),user.getPhoto());
  		 
  		return userDto;
  }

@@ -9,11 +9,28 @@ public class UserDto {
 	private Long id;
 
 	private String name;
+	
+	private byte[] photo;
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
 
 	public UserDto(Long id, String name) {
 		
 		this.id = id;
 		this.name = name;
+	}
+	
+    public UserDto(Long id, String name, byte[] photo) {
+		
+		this.id = id;
+		this.name = name;
+		this.photo = photo;
 	}
 
 	public Long getId() {
